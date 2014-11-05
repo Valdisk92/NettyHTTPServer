@@ -55,15 +55,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         speed = (System.nanoTime() - speed) / 1000000000.0;
-        System.out.println("speed first = " + speed);
         speed = (receivedBytes + sentBytes) / speed;
-        System.out.println("received bytes = " + receivedBytes);
-        System.out.println("sent bytes = " + sentBytes);
-        System.out.println("speed = " + speed);
 
         speed = new BigDecimal(speed).setScale(2, RoundingMode.UP).doubleValue();
-
-        System.out.println("speed rounded = " + speed);
 
         currentIP.setUri(uri);
         currentIP.setSentBytes(sentBytes);
