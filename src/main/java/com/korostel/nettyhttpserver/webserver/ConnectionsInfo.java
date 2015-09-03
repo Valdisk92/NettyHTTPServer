@@ -34,9 +34,6 @@ public class ConnectionsInfo {
     }
 
     public synchronized String getStatus() {
-        //Прошу прощения за "плохой-код". Все это наверное можно сделать через JSP, но с ними я не работал.
-        //А на то, что бы выучить JSP и прикрутить их к Netty нужно побольше времени.
-        //Но я старался что бы выглядело читабельно.
         StringBuilder reportBuilder = new StringBuilder();
         reportBuilder.append("<html>");
         reportBuilder.append("<table border = 1>");
