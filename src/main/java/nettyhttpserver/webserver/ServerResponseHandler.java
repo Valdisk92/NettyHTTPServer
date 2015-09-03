@@ -1,8 +1,9 @@
-package com.korostel.nettyhttpserver.webserver;
+package nettyhttpserver.webserver;
 
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
+import nettyhttpserver.webserver.util.ConnectionsInfo;
 
 import java.util.concurrent.TimeUnit;
 

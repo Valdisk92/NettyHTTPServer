@@ -25,6 +25,8 @@
         <module name="NettyHTTPServer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="NettyHTTPServer" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-

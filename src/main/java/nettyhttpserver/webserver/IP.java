@@ -1,4 +1,4 @@
-package com.korostel.nettyhttpserver.webserver;
+package nettyhttpserver.webserver;
 
 import java.util.Date;
 

@@ -1,9 +1,10 @@
-package com.korostel.nettyhttpserver.webserver;
+package nettyhttpserver.webserver.run;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import nettyhttpserver.webserver.HttpServerInitializer;
 
 /**
  * Created by Владислав on 03.11.2014.

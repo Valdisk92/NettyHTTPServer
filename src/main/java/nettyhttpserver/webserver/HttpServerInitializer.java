@@ -1,10 +1,11 @@
-package com.korostel.nettyhttpserver.webserver;
+package nettyhttpserver.webserver;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import nettyhttpserver.webserver.util.ConnectionsInfo;
 
 /**
  * Created by Владислав on 03.11.2014.
