@@ -19,6 +19,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private int sentBytes;
     private int receivedBytes;
     private double speed;
+    private long startConnectionTime;
     private IP currentIP;
 
     public HttpServerHandler(String ip) {
@@ -28,7 +29,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        speed = System.nanoTime();
+        startConnectionTime = System.nanoTime();
 
         currentIP.setIp(ip);
         HttpServerInitializer.connectionsInfo.newConnection(currentIP);
@@ -54,8 +55,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        speed = (System.nanoTime() - speed) / 1000000000.0;
-        speed = (receivedBytes + sentBytes) / speed;
+        double connectionTimeLength = (System.nanoTime() - startConnectionTime) / 1000000000.0;
+        speed = (receivedBytes + sentBytes) / connectionTimeLength;
 
         speed = new BigDecimal(speed).setScale(2, RoundingMode.UP).doubleValue();
 

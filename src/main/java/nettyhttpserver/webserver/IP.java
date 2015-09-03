@@ -6,29 +6,17 @@ import java.util.Date;
  * Created by Владислав on 03.11.2014.
  */
 public class IP {
-    private String ip = "";
-    private String uri = "";
-    private Date date = new Date();
-    private Date lastQueryDate = new Date();
-    private int sentBytes = 0;
-    private int receivedBytes = 0;
-    private double speed = 0.0;
-    private int countQuery = 0;
+    private String ip;
+    private String uri;
+    private Date date;
+    private Date lastQueryDate;
+    private int sentBytes;
+    private int receivedBytes;
+    private double speed;
+    private int countQuery;
 
     public IP() {
         this.date = new Date();
-    }
-
-    @Override
-    public String toString() {
-        return "IP{" +
-                "ip='" + ip + '\'' +
-                ", uri='" + uri + '\'' +
-                ", date=" + date +
-                ", sentBytes=" + sentBytes +
-                ", receivedBytes=" + receivedBytes +
-                ", speed=" + speed +
-                '}';
     }
 
     @Override
