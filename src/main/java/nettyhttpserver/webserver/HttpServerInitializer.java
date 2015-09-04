@@ -6,9 +6,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
 import nettyhttpserver.webserver.util.ConnectionsInfo;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
     public static ConnectionsInfo connectionsInfo = ConnectionsInfo.getInstance();

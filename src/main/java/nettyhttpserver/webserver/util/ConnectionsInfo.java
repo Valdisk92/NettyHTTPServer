@@ -4,9 +4,6 @@ import nettyhttpserver.webserver.Connection;
 
 import java.util.*;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class ConnectionsInfo {
 
     private static volatile ConnectionsInfo instance;

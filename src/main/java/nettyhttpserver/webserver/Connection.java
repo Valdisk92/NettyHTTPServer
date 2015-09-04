@@ -2,9 +2,6 @@ package nettyhttpserver.webserver;
 
 import java.util.Date;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class Connection {
     private String ip;
     private String uri;

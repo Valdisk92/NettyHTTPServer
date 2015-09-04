@@ -9,9 +9,6 @@ import io.netty.handler.codec.http.HttpRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private String uri;

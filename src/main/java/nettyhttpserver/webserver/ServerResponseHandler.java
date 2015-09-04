@@ -10,9 +10,6 @@ import java.util.concurrent.TimeUnit;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;
 import static io.netty.handler.codec.http.HttpVersion.*;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class ServerResponseHandler {
 
     public FullHttpResponse checkRequest(String request) throws InterruptedException {

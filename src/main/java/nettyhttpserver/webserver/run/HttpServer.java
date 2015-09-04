@@ -7,9 +7,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import nettyhttpserver.webserver.HttpServerInitializer;
 
-/**
- * Created by Владислав on 03.11.2014.
- */
 public class HttpServer {
     private final int PORT;
 
