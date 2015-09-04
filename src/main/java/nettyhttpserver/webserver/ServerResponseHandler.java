@@ -21,7 +21,7 @@ public class ServerResponseHandler {
 
     }
 
-    public FullHttpResponse checkRequest(ChannelHandlerContext ctx, int latency, String request) throws InterruptedException {
+    public FullHttpResponse checkRequest(ChannelHandlerContext ctx, String request) throws InterruptedException {
         String url = "";
 
         if (request.contains("?url=")) {
