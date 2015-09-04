@@ -1,6 +1,7 @@
 package nettyhttpserver.webserver.run;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -22,6 +23,7 @@ public class HttpServer {
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
+            bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
             bootstrap.group(bossGroup,workerGroup);
             bootstrap.channel(NioServerSocketChannel.class);
             bootstrap.childHandler(new HttpServerInitializer());

@@ -1,6 +1,6 @@
 package nettyhttpserver.webserver.util;
 
-import nettyhttpserver.webserver.IP;
+import nettyhttpserver.webserver.Connection;
 
 import java.util.*;
 
@@ -11,9 +11,9 @@ public class ConnectionsInfo {
 
     private static volatile ConnectionsInfo instance;
 
-    private List<IP> connectionsList = new ArrayList<>();
+    private List<Connection> connectionsList = new ArrayList<>();
     private Set<String> uniqueIPSet = new HashSet<>();
-    private Set<IP> connectionsSet = new HashSet<>();
+    private Set<Connection> connectionsSet = new HashSet<>();
 
     private Map<String, Integer> URLMap = new TreeMap<>();
     private long countConnections = 0;
@@ -56,11 +56,11 @@ public class ConnectionsInfo {
         reportBuilder.append("<th>Count Query</th>");
         reportBuilder.append("<th>Date of last query</th>");
         reportBuilder.append("</tr>");
-        for (IP ip : connectionsSet) {
+        for (Connection connection : connectionsSet) {
             reportBuilder.append("<tr>");
-            reportBuilder.append("<th>").append(ip.getIp()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getCountQuery()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getLastQueryDate()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getIp()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getCountQuery()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getLastQueryDate()).append("</th>");
             reportBuilder.append("</tr>");
         }
         reportBuilder.append("</table>");
@@ -87,14 +87,14 @@ public class ConnectionsInfo {
         reportBuilder.append("<th>received_bytes</th>");
         reportBuilder.append("<th>speed(bytes/sec)</th>");
         reportBuilder.append("</tr>");
-        for (IP ip : connectionsList) {
+        for (Connection connection : connectionsList) {
             reportBuilder.append("<tr>");
-            reportBuilder.append("<th>").append(ip.getIp()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getURL()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getDate()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getSentBytes()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getReceivedBytes()).append("</th>");
-            reportBuilder.append("<th>").append(ip.getSpeed()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getIp()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getURL()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getDate()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getSentBytes()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getReceivedBytes()).append("</th>");
+            reportBuilder.append("<th>").append(connection.getSpeed()).append("</th>");
             reportBuilder.append("</tr>");
         }
         reportBuilder.append("</table>");
@@ -110,20 +110,20 @@ public class ConnectionsInfo {
         countActive--;
     }
 
-    public synchronized void addIP(IP ip) {
+    public synchronized void addConnection(Connection connection) {
         if (connectionsList.size() > 15)
             connectionsList.remove(0);
-        connectionsList.add(ip);
+        connectionsList.add(connection);
 
-        connectionsSet.add(ip);
+        connectionsSet.add(connection);
 
     }
 
-    public synchronized void newConnection(IP ip) {
+    public synchronized void newConnection(Connection connection) {
         countConnections++;
-        for (Iterator<IP> iterator = connectionsSet.iterator(); iterator.hasNext(); ) {
-            IP element = iterator.next();
-            if (element.equals(ip)) {
+        for (Iterator<Connection> iterator = connectionsSet.iterator(); iterator.hasNext(); ) {
+            Connection element = iterator.next();
+            if (element.equals(connection)) {
                 element.addNewQuery();
                 element.setLastQueryDate(new Date());
             }

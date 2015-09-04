@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Владислав on 03.11.2014.
  */
-public class IP {
+public class Connection {
     private String ip;
     private String uri;
     private Date date;
@@ -15,7 +15,8 @@ public class IP {
     private double speed;
     private int countQuery;
 
-    public IP() {
+    public Connection(String ip) {
+        this.ip = ip;
         this.date = new Date();
     }
 
@@ -23,8 +24,8 @@ public class IP {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IP newIP = (IP) o;
-        return this.ip.equals(newIP.ip);
+        Connection newConnection = (Connection) o;
+        return this.ip.equals(newConnection.ip);
     }
 
     @Override

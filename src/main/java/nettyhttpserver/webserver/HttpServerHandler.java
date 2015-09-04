@@ -15,24 +15,20 @@ import java.math.RoundingMode;
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private String uri;
-    private String ip;
     private int sentBytes;
     private int receivedBytes;
-    private double speed;
     private long startConnectionTime;
-    private IP currentIP;
+    private Connection currentConnection;
 
     public HttpServerHandler(String ip) {
-        this.ip = ip;
-        currentIP = new IP();
+        currentConnection = new Connection(ip);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         startConnectionTime = System.nanoTime();
 
-        currentIP.setIp(ip);
-        HttpServerInitializer.connectionsInfo.newConnection(currentIP);
+        HttpServerInitializer.connectionsInfo.newConnection(currentConnection);
         HttpServerInitializer.connectionsInfo.newActiveConnection();
     }
 
@@ -56,16 +52,16 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         double connectionTimeLength = (System.nanoTime() - startConnectionTime) / 1000000000.0;
-        speed = (receivedBytes + sentBytes) / connectionTimeLength;
+        double speed = (receivedBytes + sentBytes) / connectionTimeLength;
 
         speed = new BigDecimal(speed).setScale(2, RoundingMode.UP).doubleValue();
 
-        currentIP.setUri(uri);
-        currentIP.setSentBytes(sentBytes);
-        currentIP.setReceivedBytes(receivedBytes);
-        currentIP.setSpeed(speed);
+        currentConnection.setUri(uri);
+        currentConnection.setSentBytes(sentBytes);
+        currentConnection.setReceivedBytes(receivedBytes);
+        currentConnection.setSpeed(speed);
 
-        HttpServerInitializer.connectionsInfo.addIP(currentIP);
+        HttpServerInitializer.connectionsInfo.addConnection(currentConnection);
         HttpServerInitializer.connectionsInfo.removeActiveConnection();
         ctx.flush();
     }
