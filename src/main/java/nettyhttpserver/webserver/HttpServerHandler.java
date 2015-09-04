@@ -38,7 +38,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
         uri = ((HttpRequest)msg).getUri();
         HttpServerInitializer.connectionsInfo.newUniqueConnection(uri);
-        final FullHttpResponse response = new ServerResponseHandler().checkRequest(ctx, 500, uri);
+        final FullHttpResponse response = new ServerResponseHandler().checkRequest(ctx, uri);
         if (response != null) {
             this.sentBytes = response.content().writerIndex();
             ctx.executor().schedule(new Runnable() {
