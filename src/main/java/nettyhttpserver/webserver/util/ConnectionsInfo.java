@@ -4,11 +4,13 @@ import nettyhttpserver.webserver.Connection;
 
 import java.util.*;
 
+import static io.netty.util.CharsetUtil.UTF_8;
+
 public class ConnectionsInfo {
 
-    private static volatile ConnectionsInfo instance;
+    private static ConnectionsInfo instance;
 
-    private List<Connection> connectionsList = new ArrayList<>();
+    private List<Connection> connectionsList = new LinkedList<>();
     private Set<String> uniqueIPSet = new HashSet<>();
     private Set<Connection> connectionsSet = new HashSet<>();
 
@@ -19,85 +21,49 @@ public class ConnectionsInfo {
     private ConnectionsInfo() {
     }
 
-    public synchronized static ConnectionsInfo getInstance() {
-        ConnectionsInfo localInstance = instance;
-        if (localInstance == null) {
-            synchronized (ConnectionsInfo.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new ConnectionsInfo();
-                }
-            }
+
+
+    public static ConnectionsInfo getInstance() {
+        if (instance == null) {
+            instance = new ConnectionsInfo();
         }
-        return localInstance;
+        return instance;
     }
 
-    public synchronized String getStatus() {
-        StringBuilder reportBuilder = new StringBuilder();
-        reportBuilder.append("<html>");
-        reportBuilder.append("<table border = 1>");
-        reportBuilder.append("<tr>");
-        reportBuilder.append("<th>Total connection</th>");
-        reportBuilder.append("<th>Unique connection</th>");
-        reportBuilder.append("<th>Active connection</th>");
-        reportBuilder.append("</tr>");
-        reportBuilder.append("<tr>");
-        reportBuilder.append("<th>").append(countConnections).append("</th>");
-        reportBuilder.append("<th>").append(uniqueIPSet.size()).append("</th>");
-        reportBuilder.append("<th>").append(countActive).append("</th>");
-        reportBuilder.append("</tr>");
-        reportBuilder.append("</table>");
-        reportBuilder.append("<table border = 1");
-        reportBuilder.append("<tr>");
-        reportBuilder.append("<th>IP</th>");
-        reportBuilder.append("<th>Count Query</th>");
-        reportBuilder.append("<th>Date of last query</th>");
-        reportBuilder.append("</tr>");
+    public synchronized byte[] getStatus() {
+
+        String table1Head = "<thead><tr><td>Total connection</td><td>Unique connection</td><td>Active connection</td></tr></thead>";
+        String table2Head = "<thead><tr><td>IP</td><td>Count Query</td><td>Date of last query</td></tr></thead>";
+        String table3Head = "<thead><tr><td>URL</td><td>CountURL</td></tr></thead>";
+        String table4Head = "<thead><tr><td>src_ip</td><td>URI</td><td>timestamp</td><td>sent_bytes</td><td>received_bytes</td><td>speed(bytes/sec)</td></tr></thead>";
+
+        String htmlPage2 = "";
+        htmlPage2 += "" +
+                "<html>" +
+                "<table border =1>" +
+                table1Head +
+                "<tr><th>" + countConnections + "</th><th>" + uniqueIPSet.size() + "</th><th>" + countActive + "</th></tr></table>" +
+                "<table border = 1>" +
+                table2Head;
         for (Connection connection : connectionsSet) {
-            reportBuilder.append("<tr>");
-            reportBuilder.append("<th>").append(connection.getIp()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getCountQuery()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getLastQueryDate()).append("</th>");
-            reportBuilder.append("</tr>");
+            htmlPage2 += "<tr><th>" + connection.getIp() + "</th><th>" + connection.getCountQuery() + "</th><th>" + connection.getLastQueryDate() + "</th></tr>";
         }
-        reportBuilder.append("</table>");
-        reportBuilder.append("<table border = 1>");
-        reportBuilder.append("<tr>");
-        reportBuilder.append("<th>URL</th>");
-        reportBuilder.append("<th>CountURL</th>");
-        reportBuilder.append("</tr>");
-        reportBuilder.append("<tr>");
+        htmlPage2 += "</table>" +
+                "<table border = 1>" +
+                table3Head;
         for (Map.Entry<String, Integer> k : URLMap.entrySet()) {
-            reportBuilder.append("<tr>");
-            reportBuilder.append("<th>").append(k.getKey()).append("</th>");
-            reportBuilder.append("<th>").append(k.getValue()).append("</th>");
-            reportBuilder.append("</tr>");
+            htmlPage2 += "<tr><th>" + k.getKey() + "</th><th>" + k.getValue() + "</th></tr>";
         }
-        reportBuilder.append("</table>");
-
-        reportBuilder.append("<table border = 1>");
-        reportBuilder.append("<tr>");
-        reportBuilder.append("<th>src_ip</th>");
-        reportBuilder.append("<th>URI</th>");
-        reportBuilder.append("<th>timestamp</th>");
-        reportBuilder.append("<th>sent_bytes</th>");
-        reportBuilder.append("<th>received_bytes</th>");
-        reportBuilder.append("<th>speed(bytes/sec)</th>");
-        reportBuilder.append("</tr>");
+        htmlPage2 += "</table>" +
+                "<table border = 1>" +
+                table4Head;
         for (Connection connection : connectionsList) {
-            reportBuilder.append("<tr>");
-            reportBuilder.append("<th>").append(connection.getIp()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getURL()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getDate()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getSentBytes()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getReceivedBytes()).append("</th>");
-            reportBuilder.append("<th>").append(connection.getSpeed()).append("</th>");
-            reportBuilder.append("</tr>");
+            htmlPage2 += "<tr><th>" + connection.getIp() + "</th><th>" + connection.getURL() + "</th><th>" + connection.getDate() + "</th><th>" + connection.getSentBytes() + "</th><th>" + connection.getReceivedBytes() + "</th><th>" + connection.getSpeed() + "</th></tr>";
         }
-        reportBuilder.append("</table>");
-        reportBuilder.append("</html>");
-        return reportBuilder.toString();
+        htmlPage2 += "</table></html>";
+        return htmlPage2.getBytes(UTF_8);
     }
+
 
     public synchronized void newActiveConnection() {
         countActive++;

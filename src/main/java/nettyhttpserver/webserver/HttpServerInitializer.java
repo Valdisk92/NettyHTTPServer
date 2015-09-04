@@ -3,7 +3,8 @@ package nettyhttpserver.webserver;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import nettyhttpserver.webserver.util.ConnectionsInfo;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
@@ -16,9 +17,8 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
         ChannelPipeline pipeline = socketChannel.pipeline();
 
-//        pipeline.addLast("decoder", new HttpRequestDecoder());
-//        pipeline.addLast("encoder", new HttpResponseEncoder());
-        pipeline.addLast("codec", new HttpServerCodec());
+        pipeline.addLast("decoder", new HttpRequestDecoder());
+        pipeline.addLast("encoder", new HttpResponseEncoder());
         pipeline.addLast("handler", new HttpServerHandler(ip));
     }
 }

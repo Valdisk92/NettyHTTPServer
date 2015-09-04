@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpRequest;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.TimeUnit;
 
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -30,19 +31,21 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(final ChannelHandlerContext ctx, Object msg) throws Exception {
         receivedBytes += msg.toString().length();
         if (!(msg instanceof HttpRequest))
             return;
 
         uri = ((HttpRequest)msg).getUri();
-        FullHttpResponse response = new ServerResponseHandler().checkRequest(uri);
-
         HttpServerInitializer.connectionsInfo.newUniqueConnection(uri);
-
+        final FullHttpResponse response = new ServerResponseHandler().checkRequest(ctx, 500, uri);
         if (response != null) {
             this.sentBytes = response.content().writerIndex();
-            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+            ctx.executor().schedule(new Runnable() {
+                public void run() {
+                    ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+                }
+            }, 1, TimeUnit.MILLISECONDS);
         }
     }
 

@@ -1,18 +1,27 @@
 package nettyhttpserver.webserver;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.http.*;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.util.CharsetUtil;
 import nettyhttpserver.webserver.util.ConnectionsInfo;
 
 import java.util.concurrent.TimeUnit;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.*;
-import static io.netty.handler.codec.http.HttpVersion.*;
+import static io.netty.handler.codec.http.HttpResponseStatus.FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class ServerResponseHandler {
 
-    public FullHttpResponse checkRequest(String request) throws InterruptedException {
+    public ServerResponseHandler() {
+
+    }
+
+    public FullHttpResponse checkRequest(ChannelHandlerContext ctx, int latency, String request) throws InterruptedException {
         String url = "";
 
         if (request.contains("?url=")) {
@@ -28,7 +37,7 @@ public class ServerResponseHandler {
             case "/hello":
                 return responseHelloWorld();
             case "/status":
-                return responseStatus();
+                return responseStatus(ctx);
             case "/redirect":
                 return responseRedirect(url);
             default:
@@ -52,9 +61,10 @@ public class ServerResponseHandler {
         return response;
     }
 
-    private FullHttpResponse responseStatus() {
-        return new DefaultFullHttpResponse(HTTP_1_1, OK,
-                Unpooled.copiedBuffer(HttpServerInitializer.connectionsInfo.getStatus(), CharsetUtil.US_ASCII));
+    private FullHttpResponse responseStatus(ChannelHandlerContext ctx) {
+        ByteBuf content = ctx.alloc().buffer(ConnectionsInfo.getInstance().getStatus().length);
+        content.writeBytes(ConnectionsInfo.getInstance().getStatus());
+        return new DefaultFullHttpResponse(HTTP_1_1, OK, content);
     }
 
     private FullHttpResponse responseNotFound() {
